@@ -1,7 +1,6 @@
 const Router = require("express");
 const TaskController = require("../controllers/taskController");
 const router = new Router()
-const CheckRoleMiddleware = require("../middleware/CheckRoleMiddleware");
 
 
 // router.post("/", CheckRoleMiddleware("ADMIN"), TaskController.create)

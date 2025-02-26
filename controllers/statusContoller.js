@@ -3,8 +3,8 @@ const router = require("../routes");
 
 class StatusController {
     async getAll(req, res){
-        const status = await Status.findAll();
-        return res.json(status);
+            const status = await Status.findAll();
+            return res.json(status);
 
     }
 }

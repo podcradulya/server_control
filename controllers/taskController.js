@@ -7,8 +7,8 @@ const router = require("../routes");
 class TaskController {
     async create(req, res, next){
         try{
-            const {numberTesiz, statusID, datetimeon, user_executorID, user_authorID, priorityID} = req.body;
-            const task = await Task.create({numberTesiz, statusID, datetimeon, user_executorID, user_authorID, priorityID})
+            const {number_tesiz, status_id, datetimeon, user_executor_id, user_author_id, priority_id} = req.body;
+            const task = await Task.create({number_tesiz, status_id, datetimeon, user_executor_id, user_author_id, priority_id})
             return res.json(task);
         } catch(e){
             next(ApiError.bedRequest(e.message))
@@ -17,9 +17,9 @@ class TaskController {
     }
 
     async getAll(req, res){
-        const {statusID, priorityID} = req.query;
+        const {status_id, priority_id} = req.query;
         let tasks;
-        if(!statusID && !priorityID){
+        if(!status_id && !priority_id){
             tasks = await Task.findAll();
         }
         return res.json(tasks);
