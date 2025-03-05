@@ -29,9 +29,9 @@ const Task = sequelize.define("task", {
     // priority_id: {type: DataTypes.INTEGER, allowNull: false},
 },
 {
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: 'updated_at',
+    timestamps: false,
+    // createdAt: "created_at",
+    // updatedAt: 'updated_at',
   })
 
 const Status = sequelize.define("status", {
