@@ -12,23 +12,21 @@ class reportController {
         try {
             // Получаем все задачи
             const tasks = await Task.findAll({
-                include: [{
-                    model: Status,
-                    attributes: ['name'], // Получаем только имя статуса
-                },
-                {
-                    model: User,
-                    attributes: ['login'], // Получаем только имя пользователя
-                }],
+                include: [
+                {model: User, as: 'Executor', attributes: ['login'] },
+                {model: Status, attributes: ['name'] }  
+                ],
             });
            
-            
+
+        
     
              // Группируем задачи по статусу и исполнителю
         const groupedTasks = {};
         tasks.forEach(task => {
             const statusName = task.status.name;
-            const assigneeName = task.user_executor_id.login;
+            const assigneeName = task.Executor.login;
+            
 
             if (!groupedTasks[statusName]) {
                 groupedTasks[statusName] = {};
@@ -37,19 +35,19 @@ class reportController {
             if (!groupedTasks[statusName][assigneeName]) {
                 groupedTasks[statusName][assigneeName] = 0;
             }
-            console.log(groupedTasks)
 
             groupedTasks[statusName][assigneeName]++;
         });
 
-    
+
             // Создаем массив для XLSX
             const reportData = [['ФИО ответственного', 'Статус', 'Количество задач']];
-            for (const [status, tasks] of Object.entries(groupedTasks)) {
-                const assigneeNames = [...new Set(tasks.map(task => task))]; // Получаем уникальные ФИО ответственных
-                console.log(assigneeNames)
-                reportData.push([assigneeNames.join(', '), status, tasks.length]);
-            }
+            for (const [status, assignees] of Object.entries(groupedTasks)) {
+                for (const [assignee, count] of Object.entries(assignees)) {
+                    reportData.push([assignee, status, count]);
+                }
+
+        }
     
             // Создаем новую книгу и лист
             const workbook = XLSX.utils.book_new();

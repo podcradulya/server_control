@@ -24,14 +24,14 @@ const Task = sequelize.define("task", {
     number_tesiz: {type: DataTypes.STRING, allowNull: false},
     // status_id: {type: DataTypes.INTEGER, allowNull: false},
     datetimeon: {type: DataTypes.DATE, allowNull: false},
-    user_executor_id: {type: DataTypes.INTEGER, allowNull: false},
-    user_author_id: {type: DataTypes.INTEGER, allowNull: false},
+    // user_executor_id: {type: DataTypes.INTEGER, allowNull: false},
+    // user_author_id: {type: DataTypes.INTEGER, allowNull: false},
     // priority_id: {type: DataTypes.INTEGER, allowNull: false},
 },
 {
     timestamps: false,
-    // createdAt: "created_at",
-    // updatedAt: 'updated_at',
+    createdAt: "created_at",
+    updatedAt: 'updated_at',
   })
 
 const Status = sequelize.define("status", {
@@ -50,14 +50,14 @@ const Priority = sequelize.define("priority", {
     timestamps: false,
   })
 
-  const Subordination = sequelize.define("priority", {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true,  allowNull: false},
-    leader_id: {type: DataTypes.INTEGER, allowNull: false},
-},
-{
-    timestamps: false,
-  })
+//   const Subordination = sequelize.define("priority", {
+//     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+//     name: {type: DataTypes.STRING, unique: true,  allowNull: false},
+//     leader_id: {type: DataTypes.INTEGER, allowNull: false},
+// },
+// {
+//     timestamps: false,
+//   })
 
 
 Status.hasMany(Task, {
@@ -74,6 +74,9 @@ Task.belongsTo(Priority, {
   foreignKey: 'priority_id'
 })
 
+Task.belongsTo(User, {foreignKey: 'user_executor_id', as: 'Executor'})
+Task.belongsTo(User, {foreignKey: 'user_author_id', as: 'Author'})
+
 
 // Type.belongsToMany(Brand, {through: TypeBrand});
 // Brand.belongsToMany(Type, {through: TypeBrand});
@@ -83,5 +86,5 @@ module.exports = {
     Task,
     Status,
     Priority,
-    Subordination
+    // Subordination
 }
