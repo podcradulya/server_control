@@ -19,7 +19,7 @@ class reportController {
             });
            
 
-        
+
     
              // Группируем задачи по статусу и исполнителю
         const groupedTasks = {};
@@ -39,15 +39,43 @@ class reportController {
             groupedTasks[statusName][assigneeName]++;
         });
 
+                // Получаем все статусы
+const statuses = new Set();
+for (const status in groupedTasks) {
+        statuses.add(status);  
+}
+
 
             // Создаем массив для XLSX
-            const reportData = [['ФИО ответственного', 'Статус', 'Количество задач']];
-            for (const [status, assignees] of Object.entries(groupedTasks)) {
-                for (const [assignee, count] of Object.entries(assignees)) {
-                    reportData.push([assignee, status, count]);
-                }
-
+            const statusArray = Array.from(statuses);
+            const reportData = [['ФИО ответственного', ...statusArray]];
+            const userTasks = {};
+// Заполняем словарь с пользователями и задачами
+for (const status of statusArray) {
+    for (const user in groupedTasks[status]) {
+        if (!userTasks[user]) {
+            userTasks[user] = {};
         }
+        userTasks[user][status] = groupedTasks[status][user];
+    }
+}
+           // Заполняем массив данными
+for (const user in userTasks) {
+    const row = [user];
+    for (const status of statusArray) {
+        row.push(userTasks[user][status] || 0); // 0, если задач отсутствует для данного статуса
+    }
+    reportData.push(row);
+}
+        //     for (const [status, assignees] of Object.entries(groupedTasks)) {
+        //         for (const [assignee, count] of Object.entries(assignees)) {
+        //             reportData.push([assignee, status, count]);
+        //         }
+        // }
+        console.log(reportData);
+
+        
+        
     
             // Создаем новую книгу и лист
             const workbook = XLSX.utils.book_new();

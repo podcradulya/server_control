@@ -5,9 +5,9 @@ const authMiddleware = require("../middleware/authMiddleware");
 const CheckRoleMiddleware = require("../middleware/CheckRoleMiddleware");
 
 
-router.post("/create", UserController.create)
+router.post("/create", authMiddleware, UserController.create)
 router.post("/login", UserController.login)
 router.get("/all", UserController.getAll)
-router.get("/auth", authMiddleware, UserController.check)
+router.get("/auth",  UserController.check)
 
 module.exports = router;

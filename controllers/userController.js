@@ -24,8 +24,6 @@ class UserController {
         const hashPassword = await bcrypt.hash(password, 5)
         const user = User.create({login, first_name, last_name, father_name, password: hashPassword, role, job_title, subordination_id})
 
-        const basket = Backet.create({userID: user.id})
-
         const token = generateJWT(user.id, user.login, user.first_name, user.last_name, user.father_name, user.role, user.job_title, user.subordination_id)
         return res.json({token})
     }
